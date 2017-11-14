@@ -7,11 +7,13 @@ import { MaterialModule } from './material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { ChatComponent } from './chat/chat.component';
 import { environment } from '../environments/environment';
 @NgModule({
   declarations: [
     AppComponent,
-    DrawItComponent
+    DrawItComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

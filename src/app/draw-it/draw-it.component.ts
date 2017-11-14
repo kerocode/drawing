@@ -45,11 +45,11 @@ export class DrawItComponent implements OnInit, AfterViewInit {
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     this.cx = canvasEl.getContext('2d');
     // set the width and height
-    canvasEl.width = window.innerWidth * 0.94;
+    canvasEl.width = window.innerWidth * 0.85;
     canvasEl.height = this.height;
     this.windowResize = fromEvent(window, 'resize').pipe(throttleTime(150));
     this.windowResize.subscribe((event) => {
-      canvasEl.width = event.currentTarget.innerWidth * 0.94;
+      canvasEl.width = event.currentTarget.innerWidth * 0.85;
       console.log(event);
     });
     // set some default properties about the line

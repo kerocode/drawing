@@ -1,26 +1,23 @@
-<mat-card class="containerX" style="height:900px;">
-  <div fxLayout="column" fxLayoutAlign="space-around center">
-    <div class="container" fxLayout="row" fxLayoutAlign="space-around center">
-      <div id="circle" style="background-color:#039be5" (click)="packColor('#039be5')"></div>
-      <div id="circle" style="background-color:#303f9f" (click)="packColor('#303f9f')"></div>
-      <div id="circle" style="background-color:#c2185b" (click)="packColor('#c2185b')"></div>
-      <div id="circle" style="background-color:#d32f2f" (click)="packColor('#d32f2f')"></div>
-      <div id="circle" style="background-color:#ffa000" (click)="packColor('#ffa000')"></div>
-      <div id="circle" style="background-color:#f4511e" (click)="packColor('#f4511e')"></div>
-      <div id="circle" style="background-color:#616161" (click)="packColor('#616161')"></div>
-      <div id="circle" style="background-color:#9e9e9e" (click)="packColor('#9e9e9e')"></div>
-      <div id="circle" style="background-color:#607d8b" (click)="packColor('#607d8b')"></div>
-      <div id="circle" style="background-color:#ff1744" (click)="packColor('#ff1744')"></div>
-      <mat-slider [min]="1" [max]="5" [step]="0.5" [value]="lineWidth" (input)="onInputChange($event)" thumbLabel></mat-slider>
+<div style="margin-top:10px;">
+  <mat-card class="containerX" style="height:900px;">
+    <div fxLayout="column" fxLayoutAlign="space-around center">
+      <div class="container" fxLayout="row" fxLayoutAlign="space-around center">
+        <div id="circle" style="background-color:#039be5" (click)="packColor('#039be5')"></div>
+        <div id="circle" style="background-color:#303f9f" (click)="packColor('#303f9f')"></div>
+        <div id="circle" style="background-color:#c2185b" (click)="packColor('#c2185b')"></div>
+        <div id="circle" style="background-color:#d32f2f" (click)="packColor('#d32f2f')"></div>
+        <div id="circle" style="background-color:#ffa000" (click)="packColor('#ffa000')"></div>
+        <div id="circle" style="background-color:#f4511e" (click)="packColor('#f4511e')"></div>
+        <div id="circle" style="background-color:#616161" (click)="packColor('#616161')"></div>
+        <div id="circle" style="background-color:#9e9e9e" (click)="packColor('#9e9e9e')"></div>
+        <div id="circle" style="background-color:#607d8b" (click)="packColor('#607d8b')"></div>
+        <div id="circle" style="background-color:#ff1744" (click)="packColor('#ff1744')"></div>
+        <mat-slider [min]="1" [max]="5" [step]="0.5" [value]="lineWidth" (input)="onInputChange($event)" thumbLabel></mat-slider>
+      </div>
+      <div style="margin:5px;">
+        <canvas #canvas class="container">
+        </canvas>
+      </div>
     </div>
-    <div style="margin:5px;">
-      <canvas #canvas class="container">
-
-      </canvas>
-
-    </div>
-
-  </div>
-
-
-</mat-card>
+  </mat-card>
+</div>

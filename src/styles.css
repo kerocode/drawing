@@ -23,10 +23,27 @@ footer {
     background: #283593;
     color: white;
     height: 60px;
-    padding: 10px;
+    text-align: center;
+    display: flex;
+    box-sizing: border-box;
+    padding: 0 16px;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    white-space: nowrap;
+    justify-content: center;
+}
+
+footer P {
     text-align: center;
 }
 
 img.heart {
     vertical-align: middle;
+}
+
+.messages-area {
+    height: 300px;
+    background: #fff;
+    width: 100%;
 }
