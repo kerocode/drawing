@@ -1,8 +1,9 @@
-import { Component, OnInit, ElementRef, ViewEncapsulation, HostListener, Input, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewEncapsulation, HostListener, Input, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/observable';
 import { map, filter, throttleTime, switchMap, takeUntil, pairwise } from 'rxjs/operators';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
+import { WindowSizeService } from '../services/window-size.service';
 
 @Component({
   selector: 'app-draw-it',
@@ -24,7 +25,7 @@ export class DrawItComponent implements OnInit, AfterViewInit {
 
   private cx: CanvasRenderingContext2D;
   lineWidth = 1.2;
-  constructor(private element: ElementRef, public db: AngularFireDatabase) {
+  constructor(private element: ElementRef, public db: AngularFireDatabase, private windowSize: WindowSizeService) {
     this.matadata = this.db.object('mata-data');
     this.remote$ = this.db.object('drawing-dc4d1');
     this.remote$.valueChanges().subscribe(
@@ -50,7 +51,7 @@ export class DrawItComponent implements OnInit, AfterViewInit {
     this.windowResize = fromEvent(window, 'resize').pipe(throttleTime(150));
     this.windowResize.subscribe((event) => {
       canvasEl.width = event.currentTarget.innerWidth * 0.85;
-      console.log(event);
+      this.windowSize.addSize(canvasEl.width);
     });
     // set some default properties about the line
     this.cx.lineWidth = this.lineWidth;

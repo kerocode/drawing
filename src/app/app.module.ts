@@ -9,6 +9,8 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { ChatComponent } from './chat/chat.component';
 import { environment } from '../environments/environment';
+import { WindowSizeService } from './services/window-size.service';
+import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,9 +23,10 @@ import { environment } from '../environments/environment';
     BrowserAnimationsModule,
     MaterialModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [WindowSizeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

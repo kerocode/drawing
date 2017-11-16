@@ -1,12 +1,21 @@
 <div style="margin-top:10px; margin-bottom:30px;padding:5px;">
-  <mat-card class="containerX" style="height:400px;background:#eeeeee;padding:10px;">
+  <mat-card class="containerX" style="height:400px;background:rgb(251, 251, 251);padding:10px;" [ngStyle]="{'width.px':divWidth || 1000}">
     <div fxLayout="column" fxLayoutAlign="space-around center">
       <div class="messages-area">
 
       </div>
-      <div>
-        <button mat-raised-button color="primary">
-          <img src="assets/ic_send_white_24px.svg">Send</button>
+      <div style="margin-top:20px;">
+        <div style="background:#fff;">
+          <form fxLayout="row" fxLayoutAlign="space-around center" [ngStyle]="{ 'width.px':divWidth || 1000}" [formGroup]="chatForm"
+            (ngSubmit)="onSubmit()" novalidate>
+            <mat-form-field fxFlex="90" style="margin-top:5px; margin-right:5px;">
+              <textarea matInput placeholder="Message" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="2" formControlName="message">
+              </textarea>
+            </mat-form-field>
+            <button fxFlex="9" mat-raised-button color="primary" type="submit" [disabled]="chatForm.status === 'INVALID'" style="height:65px;">
+              <img src="assets/ic_send_white_24px.svg ">Send</button>
+          </form>
+        </div>
       </div>
     </div>
   </mat-card>
