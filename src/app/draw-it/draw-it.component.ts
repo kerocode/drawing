@@ -32,11 +32,6 @@ export class DrawItComponent implements OnInit, AfterViewInit {
       (data: any) => {
         this.drawOnCanvas(data.prevPos, data.currentPos);
       });
-    this.matadata.valueChanges().subscribe(
-      (data: any) => {
-        this.cx.lineWidth = data.lineWidth;
-        this.cx.strokeStyle = data.strokeStyle;
-      });
   }
   ngOnInit() {
 
@@ -89,11 +84,7 @@ export class DrawItComponent implements OnInit, AfterViewInit {
           y: res[1].clientY - rect.top
         };
         this.remote$.set({ prevPos: prevPos, currentPos: currentPos });
-        this.remote$.valueChanges().subscribe(
-          (data: any) => {
-            this.drawOnCanvas(data.prevPos, data.currentPos);
-          });
-        // this method we'll implement soon to do the actual drawing
+
 
       });
   }
@@ -127,11 +118,12 @@ export class DrawItComponent implements OnInit, AfterViewInit {
       });
   }
   onInputChange(event: any) {
-    this.matadata.set({ lineWidth: Number(event.value), strokeStyle: this.cx.strokeStyle });
-    this.matadata.valueChanges().subscribe(
-      (data: any) => {
-        this.cx.lineWidth = data.lineWidth;
-      });
+    this.cx.lineWidth = event.value;
+    /* this.matadata.set({ lineWidth: Number(event.value), strokeStyle: this.cx.strokeStyle });
+     this.matadata.valueChanges().subscribe(
+       (data: any) => {
+         this.cx.lineWidth = data.lineWidth;
+       });*/
   }
 }
 /*

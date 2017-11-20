@@ -48,10 +48,136 @@ img.heart {
     width: 100%;
 }
 
+div {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
 .full-width {
     width: 100%;
 }
 
 .z-3 {
     box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+}
+
+.joint-room {
+    height: 250px;
+    margin-top: 100px;
+}
+
+.person-tag {
+    color: #fff;
+    padding: 5px;
+    width: 25px;
+    border-radius: 50%;
+}
+
+.tag-odd {
+    background: #303f9f;
+}
+
+.tag-even {
+    right: 5px;
+    position: absolute;
+    background: #e91e63;
+}
+
+.messages {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.even-div {
+    align-items: flex-end;
+}
+
+.odd-div {
+    align-items: flex-start;
+}
+
+.message {
+    border-radius: 20px;
+    padding: 0px 10px;
+    display: inline-block;
+}
+
+section.chat {
+    display: flex;
+    flex-direction: column;
+    word-wrap: break-word;
+    line-height: 24px;
+}
+
+.clear {
+    clear: both
+}
+
+.odd {
+    background: #303f9f;
+    position: relative;
+    border-radius: 25px;
+    color: #fff;
+    margin-left: 40px;
+}
+
+.odd:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    left: -7px;
+    height: 20px;
+    width: 20px;
+    background: #303f9f;
+    border-bottom-right-radius: 15px;
+}
+
+.odd:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: -10px;
+    width: 10px;
+    height: 20px;
+    background: #fff;
+    border-bottom-right-radius: 10px;
+}
+
+.even {
+    background: #e91e63;
+    position: relative;
+    border-radius: 25px;
+    color: #fff;
+    margin-right: 40px;
+}
+
+.even:before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    bottom: 0;
+    right: -8px;
+    height: 20px;
+    width: 20px;
+    background: #e91e63;
+    border-bottom-left-radius: 15px;
+}
+
+.even :after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    right: -10px;
+    width: 10px;
+    height: 20px;
+    background: white;
+    border-bottom-left-radius: 10px;
 }

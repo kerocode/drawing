@@ -8,10 +8,18 @@
     <app-draw-it></app-draw-it>
   </div>
 
-  <div fxFlex="90" fxLayoutAlign="center center">
-    <app-chat></app-chat>
+  <div fxLayoutAlign="center center">
+    <div fxLayout="row">
+      <div [@enterTransition]="joinForm" style="width:100%">
+        <app-join-chat (userName)="addUser($event)"></app-join-chat>
+      </div>
+      <div [@enterTransition]="chatRoom">
+        <app-chat></app-chat>
+      </div>
+    </div>
   </div>
-  <footer>
+
+  <footer style="margin-top:10px;">
     <div class="content">
       <p> Made with
         <span class="logo-font">

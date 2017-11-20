@@ -11,11 +11,13 @@ import { ChatComponent } from './chat/chat.component';
 import { environment } from '../environments/environment';
 import { WindowSizeService } from './services/window-size.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { JoinChatComponent } from './join-chat/join-chat.component';
 @NgModule({
   declarations: [
     AppComponent,
     DrawItComponent,
-    ChatComponent
+    ChatComponent,
+    JoinChatComponent
   ],
   imports: [
     BrowserModule,

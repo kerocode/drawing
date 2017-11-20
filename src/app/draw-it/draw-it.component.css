@@ -1,6 +1,6 @@
 canvas {
     border: 2px dashed #E0E0E0;
-    cursor: url('../../assets/ic_brush_black_36px.svg'), auto;
+    cursor: url('../../assets/ic_brush_black_36px.svg') 2 15, auto;
 }
 
 #circle {
