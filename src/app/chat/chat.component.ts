@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { WindowSizeService } from '../services/window-size.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AngularFireDatabase } from "angularfire2/database";
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -10,7 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ChatComponent implements OnInit, AfterViewInit {
   divWidth: Number;
   chatForm: FormGroup;
-  constructor(private windowSize: WindowSizeService, private fb: FormBuilder) {
+  constructor(private windowSize: WindowSizeService, private fb: FormBuilder, public db: AngularFireDatabase) {
     this.windowSize.RegisterListener(x => this.divWidth = x);
     this.createForm();
   }
@@ -31,7 +32,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
       name: 'me'
     });
   }
-  onSubmit(): void {
+  public onSubmit(): void {
 
   }
 }

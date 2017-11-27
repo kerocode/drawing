@@ -1,4 +1,7 @@
-import { Component, OnInit, ElementRef, ViewEncapsulation, HostListener, Input, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component, OnInit, ElementRef, ViewEncapsulation, HostListener, Input, ViewChild,
+  AfterViewInit, Output, EventEmitter, OnDestroy
+} from '@angular/core';
 import { Observable } from 'rxjs/observable';
 import { map, filter, throttleTime, switchMap, takeUntil, pairwise } from 'rxjs/operators';
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -11,11 +14,17 @@ import { WindowSizeService } from '../services/window-size.service';
   styleUrls: ['./draw-it.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class DrawItComponent implements OnInit, AfterViewInit {
+export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
+
   private mouseDown$;
   private mouseUp$;
   private mouseMove$;
   private windowResize;
+  childObject: string;
+  private drwaing = {};
+  canvasEl: HTMLCanvasElement;
+  public colors = ['#039be5', '#303f9f', '#c2185b', '#d32f2f', '#ffa000', '#f4511e', '#616161', '#9e9e9e', '#607d8b', '#ff1744',
+    '#212121', '#d50000', '#4fc3f7', '#304ffe', '#4db6ac', '#00695c', '#827717', '#4caf50'];
   matadata: AngularFireObject<{}>;
   remote$: AngularFireObject<{}>;
   @ViewChild('canvas') public canvas: ElementRef;
@@ -24,38 +33,55 @@ export class DrawItComponent implements OnInit, AfterViewInit {
   @Input() public height = 800;
 
   private cx: CanvasRenderingContext2D;
-  lineWidth = 1.2;
+  lineWidth = 3;
   constructor(private element: ElementRef, public db: AngularFireDatabase, private windowSize: WindowSizeService) {
-    this.matadata = this.db.object('mata-data');
     this.remote$ = this.db.object('drawing-dc4d1');
+    this.childObject = this.generateRandomName();
     this.remote$.valueChanges().subscribe(
-      (data: any) => {
-        this.drawOnCanvas(data.prevPos, data.currentPos);
+      (d: any) => {
+        if (d) {
+          // tslint:disable-next-line:forin
+          for (const key in d) {
+            if (this.anyChanges(key, d[key])) {
+              const data = d[key];
+              this.drawOnCanvas(data.prevPos, data.currentPos);
+              this.drwaing = d;
+            }
+          }
+        }
       });
   }
+
+  // angular life cycle hooks
   ngOnInit() {
 
   }
   public ngAfterViewInit() {
 
-    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
-    this.cx = canvasEl.getContext('2d');
+    this.canvasEl = this.canvas.nativeElement;
+    this.cx = this.canvasEl.getContext('2d');
     // set the width and height
-    canvasEl.width = window.innerWidth * 0.85;
-    canvasEl.height = this.height;
+    this.canvasEl.width = window.innerWidth * 0.85;
+    this.canvasEl.height = this.height;
     this.windowResize = fromEvent(window, 'resize').pipe(throttleTime(150));
     this.windowResize.subscribe((event) => {
-      canvasEl.width = event.currentTarget.innerWidth * 0.85;
-      this.windowSize.addSize(canvasEl.width);
+      this.canvasEl.width = event.currentTarget.innerWidth * 0.85;
+      this.windowSize.addSize(this.canvasEl.width);
     });
     // set some default properties about the line
     this.cx.lineWidth = this.lineWidth;
     this.cx.lineCap = 'round';
     this.cx.strokeStyle = '#000';
     // we'll implement this method to start capturing mouse events
-    this.captureEvents(canvasEl);
+    this.captureEvents(this.canvasEl);
   }
-
+  ngOnDestroy(): void {
+    const obj = {
+      [this.childObject]: {}
+    };
+    this.remote$.set(obj);
+  }
+  // end angular life cycle hooks
   private captureEvents(canvasEl: HTMLCanvasElement) {
 
     fromEvent(canvasEl, 'mousedown')
@@ -75,17 +101,21 @@ export class DrawItComponent implements OnInit, AfterViewInit {
         const rect = canvasEl.getBoundingClientRect();
         // previous and current position with the offset
         const prevPos = {
-          x: res[0].clientX - rect.left,
-          y: res[0].clientY - rect.top
+          x: res[0].clientX,
+          y: res[0].clientY
         };
 
         const currentPos = {
-          x: res[1].clientX - rect.left,
-          y: res[1].clientY - rect.top
+          x: res[1].clientX,
+          y: res[1].clientY
         };
-        this.remote$.set({ prevPos: prevPos, currentPos: currentPos });
-
-
+        const obj = {
+          [this.childObject]: {
+            prevPos: prevPos, currentPos: currentPos
+          }
+        };
+        // Object.defineProperty(obj, this.childObject, { value: { prevPos: prevPos, currentPos: currentPos } });
+        this.remote$.update(obj);
       });
   }
 
@@ -95,27 +125,36 @@ export class DrawItComponent implements OnInit, AfterViewInit {
   ) {
     // incase the context is not set
     if (!this.cx) { return; }
+    const rect = this.canvasEl.getBoundingClientRect();
+    const prevPosLoc = {
+      x: prevPos.x - rect.left,
+      y: prevPos.y - rect.top
+    };
 
+    const currentPosLoc = {
+      x: currentPos.x - rect.left,
+      y: currentPos.y - rect.top
+    };
     // start our drawing path
     this.cx.beginPath();
 
     // we're drawing lines so we need a previous position
     if (prevPos) {
       // sets the start point
-      this.cx.moveTo(prevPos.x, prevPos.y); // from
+      this.cx.moveTo(prevPosLoc.x, prevPosLoc.y); // from
       // draws a line from the start pos until the current position
-      this.cx.lineTo(currentPos.x, currentPos.y);
-
+      this.cx.lineTo(currentPosLoc.x, currentPosLoc.y);
       // strokes the current path with the styles we set earlier
       this.cx.stroke();
     }
   }
   packColor(color: string) {
-    this.matadata.set({ lineWidth: this.cx.lineWidth, strokeStyle: color });
+    /*this.matadata.set({ lineWidth: this.cx.lineWidth, strokeStyle: color });
     this.matadata.valueChanges().subscribe(
       (data: any) => {
         this.cx.strokeStyle = data.strokeStyle;
-      });
+      });*/
+    this.cx.strokeStyle = color;
   }
   onInputChange(event: any) {
     this.cx.lineWidth = event.value;
@@ -125,7 +164,27 @@ export class DrawItComponent implements OnInit, AfterViewInit {
          this.cx.lineWidth = data.lineWidth;
        });*/
   }
+  private generateRandomName(): string {
+    let name = 'child-';
+    let i = 0;
+    while (i < 2) {
+      name += ((Math.random() * i) + i).toString().replace('.', '').substring(i);
+      i++;
+    }
+    return name;
+  }
+
+  private anyChanges(key: string, data: any): boolean {
+    if (this.drwaing.hasOwnProperty(key)) {
+      if (data.prevPos.x === this.drwaing[key].prevPos.x && data.prevPos.y === this.drwaing[key].prevPos.y
+        && data.currentPos.x === this.drwaing[key].currentPos.x && data.currentPos.y === this.drwaing[key].currentPos.y) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
+
 /*
 constructor(private zone: NgZone) {
   this.zone.runOutsideAngular(() => {

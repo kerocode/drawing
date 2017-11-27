@@ -8,9 +8,9 @@ describe('DrawItComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DrawItComponent ]
+      declarations: [DrawItComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -21,5 +21,14 @@ describe('DrawItComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+  it('test canvas', () => {
+    const cx = component.canvasEl.getContext('2d');
+    for (let index = 0; index < 100; index++) {
+      cx.moveTo(index + 200, index + 100);
+      cx.lineTo(index + 50, index + 75);
+      cx.stroke();
+    }
+
   });
 });

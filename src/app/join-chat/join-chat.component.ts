@@ -24,7 +24,7 @@ export class JoinChatComponent implements OnInit {
       name: ['', Validators.required],
     });
   }
-  private onSubmit() {
+  public onSubmit() {
     this.userName.emit(this.joinForm.value.name);
   }
 }
