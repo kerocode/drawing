@@ -79,7 +79,7 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
     const obj = {
       [this.childObject]: {}
     };
-    this.remote$.set(obj);
+    this.remote$.update(obj);
   }
   // end angular life cycle hooks
   private captureEvents(canvasEl: HTMLCanvasElement) {

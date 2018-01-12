@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { WindowSizeService } from '../services/window-size.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AngularFireDatabase } from "angularfire2/database";
+import { AngularFireDatabase } from 'angularfire2/database';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
