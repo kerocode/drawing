@@ -111,7 +111,8 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
         };
         const obj = {
           [this.childObject]: {
-            prevPos: prevPos, currentPos: currentPos
+            prevPos: prevPos,
+            currentPos: currentPos
           }
         };
         // Object.defineProperty(obj, this.childObject, { value: { prevPos: prevPos, currentPos: currentPos } });

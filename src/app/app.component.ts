@@ -10,12 +10,14 @@ import { enterTransition } from './animations/enter.animations';
 export class AppComponent {
   joinForm = 'active';
   chatRoom = 'inactive';
+  userName: string;
   constructor(private windowSize: WindowSizeService) {
 
   }
   addUser(user: string) {
     this.chatRoom = this.trigger(this.chatRoom);
     this.joinForm = this.trigger(this.joinForm);
+    this.userName = user;
   }
 
   trigger(value): string {

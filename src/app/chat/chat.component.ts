@@ -1,7 +1,12 @@
 import { Component, OnInit, ViewEncapsulation, Input, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { WindowSizeService } from '../services/window-size.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
+export interface Message {
+  name: string;
+  message: string;
+}
+
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -11,13 +16,25 @@ import { AngularFireDatabase } from 'angularfire2/database';
 export class ChatComponent implements OnInit, AfterViewInit {
   divWidth: Number;
   chatForm: FormGroup;
+  remote$: AngularFireObject<{}>;
+  messages: Message[] = [];
+  @Input() userName: string;
   constructor(private windowSize: WindowSizeService, private fb: FormBuilder, public db: AngularFireDatabase) {
     this.windowSize.RegisterListener(x => this.divWidth = x);
+    this.remote$ = this.db.object('chat-450');
+
     this.createForm();
+    //[disabled]="chatForm.status === 'INVALID'"
   }
 
   ngOnInit() {
-
+    this.remote$.valueChanges().subscribe(
+      (data: any) => {
+        if (data.name === this.userName) {
+          data.name = 'me';
+        }
+        this.messages.push(data);
+      });
   }
   ngAfterViewInit() {
 
@@ -28,11 +45,17 @@ export class ChatComponent implements OnInit, AfterViewInit {
       message: ['', Validators.required],
       name: ['', Validators.required],
     });
-    this.chatForm.patchValue({
+    /*this.chatForm.patchValue({
       name: 'me'
-    });
+    });*/
   }
   public onSubmit(): void {
-
+    console.log(this.chatForm.value);
+    const m = {
+      name: this.userName,
+      message: this.chatForm.value['message']
+    };
+    this.remote$.update(m);
+    this.chatForm.reset();
   }
 }

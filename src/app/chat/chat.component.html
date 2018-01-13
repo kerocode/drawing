@@ -19,6 +19,14 @@
             </div>
             <span class="person-tag tag-even">KH</span>
           </div>
+          <div [ngClass]="{ 'odd-div': odd, 'even-div': even }" *ngFor="let m of messages;let even = even; let odd = odd">
+            <div class="messages" [ngClass]="{ odd: odd, even: even }">
+              <div class="message">
+                <p>{{m.message}}</p>
+              </div>
+            </div>
+            <span class="person-tag tag-even">{{m.name}}</span>
+          </div>
         </section>
       </div>
       <div style="margin-top:20px;">
@@ -29,7 +37,7 @@
               <textarea matInput placeholder="Message" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="2" formControlName="message">
               </textarea>
             </mat-form-field>
-            <button fxFlex="9" mat-raised-button color="primary" type="submit" [disabled]="chatForm.status === 'INVALID'" style="height:65px;">
+            <button fxFlex="9" mat-raised-button color="primary" type="submit" style="height:65px;">
               <img src="assets/ic_send_white_24px.svg ">Send</button>
           </form>
         </div>

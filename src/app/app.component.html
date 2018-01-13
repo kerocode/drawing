@@ -14,7 +14,7 @@
         <app-join-chat (userName)="addUser($event)"></app-join-chat>
       </div>
       <div [@enterTransition]="chatRoom">
-        <app-chat></app-chat>
+        <app-chat [userName]="userName"></app-chat>
       </div>
     </div>
   </div>
