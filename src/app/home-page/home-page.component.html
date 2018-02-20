@@ -1,0 +1,12 @@
+
+  <div >
+      <mat-grid-list cols="6" rowHeight="400px">
+          <mat-grid-tile
+              *ngFor="let tile of tiles"
+              [colspan]="tile.cols"
+              [rowspan]="tile.rows"
+              >
+              <img  [src]="'./assets/images/'+tile.url" style="width: calc(100% + 48px);"> 
+          </mat-grid-tile>
+        </mat-grid-list>
+  </div>

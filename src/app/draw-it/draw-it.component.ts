@@ -21,7 +21,7 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
   private mouseMove$;
   private windowResize;
   childObject: string;
-  private drwaing = {};
+  private drawing = {};
   canvasEl: HTMLCanvasElement;
   public colors = ['#039be5', '#303f9f', '#c2185b', '#d32f2f', '#ffa000', '#f4511e', '#616161', '#9e9e9e', '#607d8b', '#ff1744',
     '#212121', '#d50000', '#4fc3f7', '#304ffe', '#4db6ac', '#00695c', '#827717', '#4caf50'];
@@ -40,14 +40,7 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
     this.remote$.valueChanges().subscribe(
       (d: any) => {
         if (d) {
-          // tslint:disable-next-line:forin
-          for (const key in d) {
-            if (this.anyChanges(key, d[key])) {
-              const data = d[key];
-              this.drawOnCanvas(data.prevPos, data.currentPos);
-              this.drwaing = d;
-            }
-          }
+          this.drawOnCanvas(d.prevPos, d.currentPos);
         }
       });
   }
@@ -76,10 +69,7 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
     this.captureEvents(this.canvasEl);
   }
   ngOnDestroy(): void {
-    const obj = {
-      [this.childObject]: {}
-    };
-    this.remote$.update(obj);
+
   }
   // end angular life cycle hooks
   private captureEvents(canvasEl: HTMLCanvasElement) {
@@ -109,14 +99,8 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
           x: res[1].clientX,
           y: res[1].clientY
         };
-        const obj = {
-          [this.childObject]: {
-            prevPos: prevPos,
-            currentPos: currentPos
-          }
-        };
         // Object.defineProperty(obj, this.childObject, { value: { prevPos: prevPos, currentPos: currentPos } });
-        this.remote$.update(obj);
+        this.remote$.update({prevPos:prevPos,currentPos:currentPos});
       });
   }
 
@@ -175,15 +159,6 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
     return name;
   }
 
-  private anyChanges(key: string, data: any): boolean {
-    if (this.drwaing.hasOwnProperty(key)) {
-      if (data.prevPos.x === this.drwaing[key].prevPos.x && data.prevPos.y === this.drwaing[key].prevPos.y
-        && data.currentPos.x === this.drwaing[key].currentPos.x && data.currentPos.y === this.drwaing[key].currentPos.y) {
-        return false;
-      }
-    }
-    return true;
-  }
 }
 
 /*

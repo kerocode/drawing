@@ -1,11 +1,11 @@
-<div style="height:400px;">
-  <div style="background:rgb(251, 251, 251);padding:15px;height:120px;" class="joint-room z-3">
+
+  <div style="background:rgb(251, 251, 251);padding:15px;height:120px;" class="z-3">
     <form fxLayout="column" fxLayoutAlign="space-around center" [formGroup]="joinForm" (ngSubmit)="onSubmit()" novalidate>
       <mat-form-field class="full-width" style="margin-top:5px; margin-right:5px;">
         <input matInput placeholder="NickName" formControlName="name">
       </mat-form-field>
       <button fxFlex="9" mat-raised-button color="primary" type="submit" [disabled]="joinForm.status === 'INVALID'" style="height:50px;">
-        Join </button>
+        Join 
+      </button>
     </form>
   </div>
-</div>

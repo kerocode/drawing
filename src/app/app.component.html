@@ -1,34 +1,25 @@
-<div fxLayout="column" fxLayoutAlign="space-between center">
+<div class="content">
   <mat-toolbar class="mat-primary">
     <div class="mat-toolbar-tools">
-      <h2 class="mat-flex">My Drawing vs. You</h2>
+      <h2 class="mat-flex">Drawing.io</h2>
     </div>
   </mat-toolbar>
-  <div fxFlex="90" fxLayoutAlign="center center">
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+ <!--  <div fxFlex="90" fxLayoutAlign="center center">
     <app-draw-it></app-draw-it>
   </div>
 
-  <div fxLayoutAlign="center center">
-    <div fxLayout="row">
-      <div [@enterTransition]="joinForm" style="width:100%">
+ <div fxLayout="row" fxLayoutAlign="center center" style="width:600px;">
+      <div [@enterTransition]="joinForm" style="width:100%" fxflex>
         <app-join-chat (userName)="addUser($event)"></app-join-chat>
       </div>
-      <div [@enterTransition]="chatRoom">
+      <div [@enterTransition]="chatRoom" fxflex>
         <app-chat [userName]="userName"></app-chat>
       </div>
-    </div>
   </div>
-
-  <footer style="margin-top:10px;">
-    <div class="content">
-      <p> Made with
-        <span class="logo-font">
-          <img src="assets/ic_favorite_black_24px.svg" class="heart" />
-        </span> Keroles Hakem
-        <span class="attribution">
-          &copy; 2017. Code licensed under MIT.
-        </span>
-      </p>
-    </div>
-  </footer>
+-->
 </div>
+
+
