@@ -1,8 +1,14 @@
 <div class="content">
   <mat-toolbar class="mat-primary">
-    <div class="mat-toolbar-tools">
-      <h2 class="mat-flex">Drawing.io</h2>
-    </div>
+    <span>
+      <h2><a routerLink="/home" style="color: white;text-decoration: none;">Drawing.io</a></h2>
+    </span>
+      <!-- This fills the remaining space of the current row -->
+  <span class="spacer"></span>
+    <span>
+        <button mat-button color="white"  routerLink="/log-in" routerLinkActive="active">Log In</button>
+        <button mat-button color="white"  routerLink="/sign-up" routerLinkActive="active">Sign Up</button>
+    </span>
   </mat-toolbar>
   <div class="content">
     <router-outlet></router-outlet>
@@ -20,6 +26,6 @@
       </div>
   </div>
 -->
-</div>
+
 
 

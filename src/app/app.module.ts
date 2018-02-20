@@ -17,6 +17,8 @@ import { PageNotFoundComponent } from "./page-not-found/page-not-found.component
 import { HomePageComponent } from "./home-page/home-page.component";
 import { LogInComponent } from './log-in/log-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { PicModalComponent } from './pic-modal/pic-modal.component';
+import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
 //app routes 
 const appRoutes: Routes = [
   {
@@ -47,7 +49,11 @@ const appRoutes: Routes = [
     LogInComponent,
     SignUpComponent,
     HomePageComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    PicModalComponent
+  ],
+  entryComponents: [
+    PicModalComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +68,9 @@ const appRoutes: Routes = [
     AngularFireDatabaseModule,
     ReactiveFormsModule
   ],
-  providers: [WindowSizeService],
+  providers: [WindowSizeService,
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

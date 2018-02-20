@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./log-in.component.css']
 })
 export class LogInComponent implements OnInit {
-
+  hide :boolean = true;
   constructor() { }
 
   ngOnInit() {

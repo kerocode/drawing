@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { PicModalComponent } from '../pic-modal/pic-modal.component';
 
 @Component({
   selector: 'app-home-page',
@@ -17,9 +19,15 @@ export class HomePageComponent implements OnInit {
     {url: '8.jpg', cols: 2, rows: 1},
     {url: '9.jpg', cols: 1, rows: 1},
   ];
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
   }
-
+  openDialog(url):void{
+  let dialogRef = this.dialog.open(PicModalComponent, {
+    width: '75%',
+    height:'75%',
+    data: {url:url}
+  });
+ }
 }

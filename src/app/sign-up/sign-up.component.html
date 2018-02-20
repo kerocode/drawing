@@ -1,3 +1,21 @@
-<p>
-  sign-up works!
-</p>
+<div class="form-style">
+  <h3 class="text-center">Sign Up</h3>
+  <div class="form-container">
+      <mat-form-field >
+          <input matInput placeholder="Your Name" type="text" class="example-right-align">
+          <span matPrefix><img style="vertical-align: bottom;" [src]="'./assets/icons/ic_perm_identity_black_24px.svg'">&nbsp;</span>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Your Email" type="email" class="example-right-align">
+            <span matPrefix><img style="vertical-align: bottom;" [src]="'./assets/icons/ic_email_black_24px.svg'">&nbsp;</span>
+          </mat-form-field>
+           <mat-form-field>
+              <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'">
+              <span matPrefix><img style="vertical-align: bottom;" [src]="'./assets/icons/ic_lock_black_24px.svg'">&nbsp;</span>
+              <img matSuffix (click)="hide = !hide" [src]="hide ? './assets/icons/ic_visibility_black_24px.svg' : './assets/icons/ic_visibility_off_black_24px.svg'">
+            </mat-form-field>
+            <div>
+                <button mat-raised-button class="centered-button" style="background-color:#ff7043;color:white">Sign Up</button>
+            </div>
+  </div>
+</div>

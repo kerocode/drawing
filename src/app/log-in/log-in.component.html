@@ -1,3 +1,30 @@
-<p>
-  log-in works!
-</p>
+
+<div class="form-style">
+    <h3 class="text-center">Log In</h3>
+    <div class="form-container">
+          <mat-form-field>
+              <input matInput placeholder="Your Email" type="email" class="example-right-align">
+              <span matPrefix><img style="vertical-align: bottom;" [src]="'./assets/icons/ic_email_black_24px.svg'">&nbsp;</span>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'">
+                <span matPrefix><img style="vertical-align: bottom;" [src]="'./assets/icons/ic_lock_black_24px.svg'">&nbsp;</span>
+                <img matSuffix (click)="hide = !hide" [src]="hide ? './assets/icons/ic_visibility_black_24px.svg' : './assets/icons/ic_visibility_off_black_24px.svg'">
+            </mat-form-field>
+              <div>
+                  <button mat-raised-button class="centered-button" style="background-color:#ec407a;color:white">Log In</button>
+              </div>
+              <div style="margin:20px 0px;">
+                <mat-divider></mat-divider>
+              </div>
+              <div>
+                  <p style="text-align:right;">
+                    <span style="color:#9e9e9e;">
+                        Don't have an account?
+                    </span>
+                    <a class="link" routerLink="/sign-up">Sign up</a>
+                  </p>
+              </div>
+
+    </div>
+</div>
