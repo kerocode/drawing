@@ -1,0 +1,19 @@
+
+  .error-banner {
+    padding: 60px 0 20px;
+    position: relative;
+    display: inline-block;
+    font-family: Helvetica-neue, Helvetica, Arial, sans-serif;
+    color: #788392;
+  }
+  .middle-div{
+      margin: auto auto;
+      display: block;
+      width: 700px;
+  }
+  .error-banner h2 {
+    font-size: 50px;
+    font-weight: normal;
+
+  }
+ 

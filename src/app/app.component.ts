@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { WindowSizeService } from './services/window-size.service';
 import { enterTransition } from './animations/enter.animations';
+import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,9 +11,19 @@ import { enterTransition } from './animations/enter.animations';
 export class AppComponent {
   joinForm = 'active';
   chatRoom = 'inactive';
+  isloggedIn :boolean = false;
   userName: string;
-  constructor(private windowSize: WindowSizeService) {
-
+  constructor(private windowSize: WindowSizeService,private authService:AuthService) {
+   const authorizedUser =  authService.authorizedUser();
+   authorizedUser.subscribe(
+      user=>{
+        if(user){
+          this.isloggedIn =true;
+        }else{
+          this.isloggedIn = false;
+        }
+      }
+    );
   }
   addUser(user: string) {
     this.chatRoom = this.trigger(this.chatRoom);
@@ -22,5 +33,8 @@ export class AppComponent {
 
   trigger(value): string {
     return value === 'active' ? 'inactive' : 'active';
+  }
+  logOut():void{
+    this.authService.logout();
   }
 }

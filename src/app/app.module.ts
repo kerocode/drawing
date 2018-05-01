@@ -8,9 +8,11 @@ import { MaterialModule } from './material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from "angularfire2/auth";
 import { ChatComponent } from './chat/chat.component';
 import { environment } from '../environments/environment';
 import { WindowSizeService } from './services/window-size.service';
+import { AuthService } from "./services/auth.service";
 import { ReactiveFormsModule } from '@angular/forms';
 import { JoinChatComponent } from './join-chat/join-chat.component';
 import { PageNotFoundComponent } from "./page-not-found/page-not-found.component";
@@ -19,6 +21,7 @@ import { LogInComponent } from './log-in/log-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { PicModalComponent } from './pic-modal/pic-modal.component';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
+import { AuthGuardService } from './services/auth-guard.service';
 //app routes 
 const appRoutes: Routes = [
   {
@@ -32,6 +35,11 @@ const appRoutes: Routes = [
   {
     path: 'home',
     component: HomePageComponent
+  },
+  {
+    path: 'draw',
+    component: DrawItComponent,
+    canActivate: [AuthGuardService] 
   },
   { path: '',
     redirectTo: '/home',
@@ -64,11 +72,12 @@ const appRoutes: Routes = [
     ),
     BrowserAnimationsModule,
     MaterialModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule.initializeApp(environment.firebase,'angular-auth-firebase'),
     AngularFireDatabaseModule,
+    AngularFireAuthModule,
     ReactiveFormsModule
   ],
-  providers: [WindowSizeService,
+  providers: [WindowSizeService,AuthService,AuthGuardService,
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}}
   ],
   bootstrap: [AppComponent]

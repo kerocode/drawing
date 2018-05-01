@@ -5,10 +5,16 @@
     </span>
       <!-- This fills the remaining space of the current row -->
   <span class="spacer"></span>
-    <span>
+    <span *ngIf="isloggedIn; else logOutBlock">
+        <button mat-button color="white"  routerLink="/draw" routerLinkActive="active">Draw</button>
+        <button mat-button color="white"  (click)="logOut()">Log Out</button>
+    </span>
+    <ng-template #logOutBlock>
+      <span>
         <button mat-button color="white"  routerLink="/log-in" routerLinkActive="active">Log In</button>
         <button mat-button color="white"  routerLink="/sign-up" routerLinkActive="active">Sign Up</button>
     </span>
+    </ng-template>
   </mat-toolbar>
   <div class="content">
     <router-outlet></router-outlet>

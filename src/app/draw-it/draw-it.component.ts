@@ -7,6 +7,7 @@ import { map, filter, throttleTime, switchMap, takeUntil, pairwise } from 'rxjs/
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
 import { WindowSizeService } from '../services/window-size.service';
+import { AuthService } from './../services/auth.service';
 
 @Component({
   selector: 'app-draw-it',
@@ -34,15 +35,17 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private cx: CanvasRenderingContext2D;
   lineWidth = 3;
-  constructor(private element: ElementRef, public db: AngularFireDatabase, private windowSize: WindowSizeService) {
-    this.remote$ = this.db.object('drawing-dc4d1');
-    this.childObject = this.generateRandomName();
-    this.remote$.valueChanges().subscribe(
-      (d: any) => {
-        if (d) {
-          this.drawOnCanvas(d.prevPos, d.currentPos);
-        }
-      });
+  constructor(private element: ElementRef, public db: AngularFireDatabase, private windowSize: WindowSizeService, private  authService:AuthService) {
+    if(authService.isLoggedIn()){
+      this.remote$ = this.db.object('drawing-dc4d1');
+      this.childObject = this.generateRandomName();
+      this.remote$.valueChanges().subscribe(
+        (d: any) => {
+          if (d) {
+            this.drawOnCanvas(d.prevPos, d.currentPos);
+          }
+        });
+    }
   }
 
   // angular life cycle hooks
