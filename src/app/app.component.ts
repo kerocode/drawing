@@ -14,7 +14,7 @@ export class AppComponent {
   isloggedIn :boolean = false;
   userName: string;
   constructor(private windowSize: WindowSizeService,private authService:AuthService) {
-   const authorizedUser =  authService.authorizedUser();
+   let authorizedUser =  authService.authorizedUser;
    authorizedUser.subscribe(
       user=>{
         if(user){
@@ -23,7 +23,7 @@ export class AppComponent {
           this.isloggedIn = false;
         }
       }
-    );
+   );
   }
   addUser(user: string) {
     this.chatRoom = this.trigger(this.chatRoom);

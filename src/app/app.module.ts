@@ -7,7 +7,8 @@ import { DrawItComponent } from './draw-it/draw-it.component';
 import { MaterialModule } from './material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireDatabaseModule } from "angularfire2/database";
 import { AngularFireAuthModule } from "angularfire2/auth";
 import { ChatComponent } from './chat/chat.component';
 import { environment } from '../environments/environment';
@@ -73,6 +74,7 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     MaterialModule,
     AngularFireModule.initializeApp(environment.firebase,'angular-auth-firebase'),
+    AngularFirestoreModule,
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     ReactiveFormsModule

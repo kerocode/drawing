@@ -2,13 +2,14 @@ import {
   Component, OnInit, ElementRef, ViewEncapsulation, HostListener, Input, ViewChild,
   AfterViewInit, Output, EventEmitter, OnDestroy
 } from '@angular/core';
-import { Observable } from 'rxjs/observable';
-import { map, filter, throttleTime, switchMap, takeUntil, pairwise } from 'rxjs/operators';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
+import { Observable,fromEvent } from 'rxjs';
+import { map, filter, throttleTime, switchMap, takeUntil, pairwise, tap } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFireDatabase,AngularFireObject} from 'angularfire2/database';
 import { WindowSizeService } from '../services/window-size.service';
 import { AuthService } from './../services/auth.service';
-
+import * as firebase from 'firebase/app';
+import { User } from '@firebase/auth-types';
 @Component({
   selector: 'app-draw-it',
   templateUrl: './draw-it.component.html',
@@ -26,26 +27,52 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
   canvasEl: HTMLCanvasElement;
   public colors = ['#039be5', '#303f9f', '#c2185b', '#d32f2f', '#ffa000', '#f4511e', '#616161', '#9e9e9e', '#607d8b', '#ff1744',
     '#212121', '#d50000', '#4fc3f7', '#304ffe', '#4db6ac', '#00695c', '#827717', '#4caf50'];
-  matadata: AngularFireObject<{}>;
-  remote$: AngularFireObject<{}>;
-  @ViewChild('canvas') public canvas: ElementRef;
+  matadata: Observable<any>;
+  private remoteRef$:AngularFireObject<any>
+  private usersRef$: AngularFireObject<any>
+  private remote$:Observable<any>
+  private users$: Observable<any>
+  private user : User; 
+  @ViewChild('myCanvas') public myCanvas: ElementRef;
   // setting a width and height for the canvas
   @Input() public width = 600;
   @Input() public height = 800;
 
   private cx: CanvasRenderingContext2D;
   lineWidth = 3;
-  constructor(private element: ElementRef, public db: AngularFireDatabase, private windowSize: WindowSizeService, private  authService:AuthService) {
-    if(authService.isLoggedIn()){
-      this.remote$ = this.db.object('drawing-dc4d1');
-      this.childObject = this.generateRandomName();
-      this.remote$.valueChanges().subscribe(
-        (d: any) => {
-          if (d) {
-            this.drawOnCanvas(d.prevPos, d.currentPos);
+  constructor(private element: ElementRef, public db: AngularFireDatabase, private windowSize: WindowSizeService, 
+    private  authService:AuthService) {
+    this.remote$ = this.db.object('drawing').valueChanges();
+    this.remote$.subscribe(
+      (d: any) => {
+        if (d) {
+          this.drawOnCanvas(d.prevPos, d.currentPos);
+        }
+      }); 
+    authService.authorizedUser.subscribe(
+      usr=>{
+        if(usr){
+          this.user = usr ;
+          let path = `users/${usr.uid}`;
+          this.users$ =  this.db.object('users').valueChanges();  
+        }     
+       /* authService.authorizedUser().subscribe(
+          (user)=>{
+            this.user = user;
+            let path = `users/${this.user.uid}`;
+            this.remote$ = this.db.object(`drawing-dc4d1/${this.user.uid}`);
+            this.remote$.subscribe(
+              (d: any) => {
+                if (d) {
+                  this.drawOnCanvas(d.prevPos, d.currentPos);
+                }
+              });
+            this.db.object(path).update({'isLoggedIn':true})
+            .catch(error=> console.log(error));
           }
-        });
-    }
+        ); */
+      });
+
   }
 
   // angular life cycle hooks
@@ -54,7 +81,7 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   public ngAfterViewInit() {
 
-    this.canvasEl = this.canvas.nativeElement;
+    this.canvasEl = this.myCanvas.nativeElement;
     this.cx = this.canvasEl.getContext('2d');
     // set the width and height
     this.canvasEl.width = window.innerWidth * 0.85;
@@ -103,7 +130,7 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
           y: res[1].clientY
         };
         // Object.defineProperty(obj, this.childObject, { value: { prevPos: prevPos, currentPos: currentPos } });
-        this.remote$.update({prevPos:prevPos,currentPos:currentPos});
+        this.remoteRef$.update({prevPos:prevPos,currentPos:currentPos});
       });
   }
 

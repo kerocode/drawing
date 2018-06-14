@@ -5,10 +5,16 @@
         <div id="circle" *ngFor="let color of colors " [ngStyle]="{'background-color':color}" (click)="packColor(color)"></div>
         <mat-slider [min]="1" [max]="5" [step]="0.5" [value]="lineWidth" (input)="onInputChange($event)" thumbLabel></mat-slider>
       </div>
-      <div style="margin:5px;">
-        <canvas #canvas class="container">
-        </canvas>
+      <div style="margin:5px;">   
+        <canvas #myCanvas class="container"></canvas>
+        <!--<canvas #yourCanvas class="container"></canvas>-->              
       </div>
     </div>
   </mat-card>
 </div>
+<!--
+  <mat-grid-list cols="2" rowHeight="1:1">
+  <mat-grid-tile>1</mat-grid-tile>
+  <mat-grid-tile>2</mat-grid-tile>
+</mat-grid-list>
+-->

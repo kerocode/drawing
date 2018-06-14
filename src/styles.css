@@ -19,7 +19,7 @@ html{
   }
   .footer {
     flex-shrink: 0;
-    background: #283593;
+    background: #227ea0;
     display: flex;
     flex-direction: column;
     color: white;
@@ -243,4 +243,14 @@ section.chat {
   }
   .link:hover{
       cursor: pointer;
+  }
+
+  .mat-toolbar-style {
+    background: -webkit-linear-gradient(50deg,#45cafc,#303f9f)!important;
+    background: -o-linear-gradient(50deg,#45cafc,#303f9f)!important;
+    background: linear-gradient(40deg,#45cafc,#303f9f)!important;
+    /* background: #673ab7; */
+    color: #fff;
+    -webkit-box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25);
+    box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25);
   }

@@ -1,32 +1,30 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
-import { Observable, } from 'rxjs/Observable'
+///import * as firebase from 'firebase/app';
+import { firebase } from '@firebase/app';
+import { User } from '@firebase/auth-types';
 import { Message } from './../chat/chat.component';
-import { of } from 'rxjs/observable/of';
-import { Subject } from 'rxjs/subject';
+import { Subject,of,Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireDatabase } from 'angularfire2/database';
+
 @Injectable()
 export class AuthService implements OnDestroy {
 
-  private user: Observable<firebase.User>;
-  private userDetails:Subject<firebase.User>; 
-  constructor(private _firebaseAuth: AngularFireAuth, private router: Router) { 
-    this.userDetails = new Subject();
+  private user:Observable<User>;
+  private userId:string;
+  constructor(private _firebaseAuth: AngularFireAuth, private router: Router,private db:AngularFireDatabase) { 
     this.user = _firebaseAuth.authState;
-    this.user.subscribe(
-      (user) => {
-          if(user){
-            this.userDetails.next(user);
-          }else{
-            this.userDetails.next(null);
-          }         
-          console.log('user details',this.userDetails);
+    this.user.subscribe(usr=>{
+      if(usr){
+        this.userId = usr.uid;
+        this.db.object(`loggedInUsers/${this.userId}`).update({'login':true});
       }
-    );
+    });
   }
   ngOnDestroy(): void {
-    this.userDetails.unsubscribe();
   }
   signInWithTwitter() {
     return this._firebaseAuth.auth.signInWithPopup(
@@ -46,15 +44,15 @@ export class AuthService implements OnDestroy {
       new firebase.auth.GoogleAuthProvider()
     )
   }
-  authorizedUser():Subject<firebase.User>{
+  /*authorizedUser():Subject<User>{
   return  this.userDetails;
- }
+  }*/
+  get authorizedUser():Observable<User>{
+    return this.user;
+  }
 
-  isLoggedIn():boolean {
-  if (this.userDetails == null ) {
-      return false;
-    }
-    return true;
+  get isLoggedIn():boolean {
+    return this.user !== null;
   }
 
   signUp(email:string,password:string):Promise<any>{
@@ -84,7 +82,7 @@ export class AuthService implements OnDestroy {
   logout() {
     this._firebaseAuth.auth.signOut()
     .then((res) => {
-      this.userDetails.next(null);
+      this.db.object(`loggedInUsers/${this.userId}`).remove();
       this.router.navigate(['/']);
   });
   }

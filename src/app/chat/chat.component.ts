@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { WindowSizeService } from '../services/window-size.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 export interface Message {
   name: string;
   message: string;
@@ -16,12 +16,12 @@ export interface Message {
 export class ChatComponent implements OnInit, AfterViewInit {
   divWidth: Number;
   chatForm: FormGroup;
-  remote$: AngularFireObject<{}>;
+  remote$: AngularFirestoreDocument<{}>;
   messages: Message[] = [];
   @Input() userName: string;
-  constructor(private windowSize: WindowSizeService, private fb: FormBuilder, public db: AngularFireDatabase) {
+  constructor(private windowSize: WindowSizeService, private fb: FormBuilder, public db: AngularFirestore) {
     this.windowSize.RegisterListener(x => this.divWidth = x);
-    this.remote$ = this.db.object('chat-450');
+    this.remote$ = this.db.doc('chat-450');
 
     this.createForm();
     //[disabled]="chatForm.status === 'INVALID'"
