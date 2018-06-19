@@ -2,18 +2,19 @@ import {
   Component, OnInit, ElementRef, ViewEncapsulation, HostListener, Input, ViewChild,
   AfterViewInit, Output, EventEmitter, OnDestroy
 } from '@angular/core';
-import { Observable,fromEvent } from 'rxjs';
+import { Observable, fromEvent } from 'rxjs';
 import { map, filter, throttleTime, switchMap, takeUntil, pairwise, tap } from 'rxjs/operators';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
-import { AngularFireDatabase,AngularFireObject} from 'angularfire2/database';
+import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
 import { WindowSizeService } from '../services/window-size.service';
 import { AuthService } from './../services/auth.service';
-import * as firebase from 'firebase/app';
 import { User } from '@firebase/auth-types';
+import { chatTransition } from '../animations/chat.animations';
+import { ChatModalComponent } from '../chat-modal/chat-modal.component';
 @Component({
   selector: 'app-draw-it',
   templateUrl: './draw-it.component.html',
   styleUrls: ['./draw-it.component.css'],
+  animations: [chatTransition],
   encapsulation: ViewEncapsulation.None
 })
 export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -22,55 +23,59 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
   private mouseUp$;
   private mouseMove$;
   private windowResize;
+
   childObject: string;
   private drawing = {};
   canvasEl: HTMLCanvasElement;
   public colors = ['#039be5', '#303f9f', '#c2185b', '#d32f2f', '#ffa000', '#f4511e', '#616161', '#9e9e9e', '#607d8b', '#ff1744',
     '#212121', '#d50000', '#4fc3f7', '#304ffe', '#4db6ac', '#00695c', '#827717', '#4caf50'];
   matadata: Observable<any>;
-  private remoteRef$:AngularFireObject<any>
+  private remoteRef$: AngularFireObject<any>
   private usersRef$: AngularFireObject<any>
-  private remote$:Observable<any>
+  private remote$: Observable<any>
   private users$: Observable<any>
-  private user : User; 
+  private user: User;
   @ViewChild('myCanvas') public myCanvas: ElementRef;
+  @ViewChild('chatModal') public chatModal: ChatModalComponent;
   // setting a width and height for the canvas
   @Input() public width = 600;
   @Input() public height = 800;
 
   private cx: CanvasRenderingContext2D;
   lineWidth = 3;
-  constructor(private element: ElementRef, public db: AngularFireDatabase, private windowSize: WindowSizeService, 
-    private  authService:AuthService) {
+  showChat: boolean = false;
+  constructor(private element: ElementRef, public db: AngularFireDatabase, private windowSize: WindowSizeService,
+    private authService: AuthService) {
+    this.remoteRef$ = this.db.object('drawing');
     this.remote$ = this.db.object('drawing').valueChanges();
     this.remote$.subscribe(
       (d: any) => {
         if (d) {
           this.drawOnCanvas(d.prevPos, d.currentPos);
         }
-      }); 
+      });
     authService.authorizedUser.subscribe(
-      usr=>{
-        if(usr){
-          this.user = usr ;
+      usr => {
+        if (usr) {
+          this.user = usr;
           let path = `users/${usr.uid}`;
-          this.users$ =  this.db.object('users').valueChanges();  
-        }     
-       /* authService.authorizedUser().subscribe(
-          (user)=>{
-            this.user = user;
-            let path = `users/${this.user.uid}`;
-            this.remote$ = this.db.object(`drawing-dc4d1/${this.user.uid}`);
-            this.remote$.subscribe(
-              (d: any) => {
-                if (d) {
-                  this.drawOnCanvas(d.prevPos, d.currentPos);
-                }
-              });
-            this.db.object(path).update({'isLoggedIn':true})
-            .catch(error=> console.log(error));
-          }
-        ); */
+          this.users$ = this.db.object('users').valueChanges();
+        }
+        /* authService.authorizedUser().subscribe(
+           (user)=>{
+             this.user = user;
+             let path = `users/${this.user.uid}`;
+             this.remote$ = this.db.object(`drawing-dc4d1/${this.user.uid}`);
+             this.remote$.subscribe(
+               (d: any) => {
+                 if (d) {
+                   this.drawOnCanvas(d.prevPos, d.currentPos);
+                 }
+               });
+             this.db.object(path).update({'isLoggedIn':true})
+             .catch(error=> console.log(error));
+           }
+         ); */
       });
 
   }
@@ -106,17 +111,17 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
 
     fromEvent(canvasEl, 'mousedown')
       .pipe(
-      switchMap((e) => {
-        return fromEvent(canvasEl, 'mousemove').pipe(
-          // after a mouse down, we'll record all mouse moves
-          // we'll stop (and unsubscribe) once the user releases the mouse
-          // this will trigger a mouseUp event
-          takeUntil(fromEvent(canvasEl, 'mouseup')),
-          // pairwise lets us get the previous value to draw a line from
-          // the previous point to the current point
-          pairwise()
-        );
-      }))
+        switchMap((e) => {
+          return fromEvent(canvasEl, 'mousemove').pipe(
+            // after a mouse down, we'll record all mouse moves
+            // we'll stop (and unsubscribe) once the user releases the mouse
+            // this will trigger a mouseUp event
+            takeUntil(fromEvent(canvasEl, 'mouseup')),
+            // pairwise lets us get the previous value to draw a line from
+            // the previous point to the current point
+            pairwise()
+          );
+        }))
       .subscribe((res: [MouseEvent, MouseEvent]) => {
         const rect = canvasEl.getBoundingClientRect();
         // previous and current position with the offset
@@ -130,7 +135,7 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
           y: res[1].clientY
         };
         // Object.defineProperty(obj, this.childObject, { value: { prevPos: prevPos, currentPos: currentPos } });
-        this.remoteRef$.update({prevPos:prevPos,currentPos:currentPos});
+        this.remoteRef$.update({ prevPos: prevPos, currentPos: currentPos });
       });
   }
 
@@ -188,7 +193,9 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     return name;
   }
-
+  public toggleChat(): void {
+    this.showChat = !this.showChat;
+  }
 }
 
 /*

@@ -254,3 +254,8 @@ section.chat {
     -webkit-box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25);
     box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25);
   }
+  .color-gradient{
+    background: -webkit-linear-gradient(50deg,#45cafc,#303f9f)!important;
+    background: -o-linear-gradient(50deg,#45cafc,#303f9f)!important;
+    background: linear-gradient(40deg,#45cafc,#303f9f)!important;
+  }

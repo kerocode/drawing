@@ -23,6 +23,7 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { PicModalComponent } from './pic-modal/pic-modal.component';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
 import { AuthGuardService } from './services/auth-guard.service';
+import { ChatModalComponent } from './chat-modal/chat-modal.component';
 //app routes 
 const appRoutes: Routes = [
   {
@@ -59,7 +60,8 @@ const appRoutes: Routes = [
     SignUpComponent,
     HomePageComponent,
     PageNotFoundComponent,
-    PicModalComponent
+    PicModalComponent,
+    ChatModalComponent
   ],
   entryComponents: [
     PicModalComponent

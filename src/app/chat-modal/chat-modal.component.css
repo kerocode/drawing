@@ -1,0 +1,11 @@
+.btn-style {
+  background: linear-gradient(40deg, #45cafc, #303f9f) !important;
+  padding: 0px 12px;
+  border: 0px;
+  border-radius: 12px;
+  transition: all 400ms ease-in-out;
+}
+
+.btn-style:hover {
+  background: linear-gradient(65deg, #45cafc, #303f9f) !important;
+}

@@ -1,0 +1,14 @@
+<div *ngIf="data.value === 'active'" [@overlay]="data.params" style="z-index: 900;">
+  <div class="container" style="position: relative;margin-right: 25px;">
+    <div style="position: absolute; right:-10px; top:-10px; z-index: 10;">
+      <button (click)="hide()" class="btn-style">
+        <img src="assets/icons/baseline-clear-24px.svg" alt="" srcset="">
+      </button>
+    </div>
+    <div style="z-index: 9;">
+      <mat-card>
+        <ng-content></ng-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

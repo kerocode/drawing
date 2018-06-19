@@ -1,5 +1,5 @@
-<div style="margin-top:10px; margin-bottom:30px;padding:5px;">
-  <mat-card class="containerX" style="height:400px;background:rgb(251, 251, 251);padding:10px;" [ngStyle]="{'width.px':divWidth || 1000}">
+<div style="padding:5px;height:450px;">
+  <div class="containerX" style="background:rgb(251, 251, 251);">
     <div fxLayout="column" fxLayoutAlign="space-around center">
       <div class="messages-area">
         <section class="chat">
@@ -31,17 +31,16 @@
       </div>
       <div style="margin-top:20px;">
         <div style="background:#fff;">
-          <form fxLayout="row" fxLayoutAlign="space-around center" [ngStyle]="{ 'width.px':divWidth || 1000}" [formGroup]="chatForm"
-            (ngSubmit)="onSubmit()" novalidate>
+          <form fxLayout="row" fxLayoutAlign="space-around center" [formGroup]="chatForm" (ngSubmit)="onSubmit()" novalidate>
             <mat-form-field fxFlex="90" style="margin-top:5px; margin-right:5px;">
               <textarea matInput placeholder="Message" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="2" formControlName="message">
               </textarea>
             </mat-form-field>
-            <button fxFlex="9" mat-raised-button color="primary" type="submit" style="height:65px;">
-              <img src="assets/ic_send_white_24px.svg ">Send</button>
+            <button mat-raised-button class="color-gradient" type="submit" style="height:65px;color:#fff">
+              <img src="assets/icons/ic_send_white_24px.svg">Send</button>
           </form>
         </div>
       </div>
     </div>
-  </mat-card>
+  </div>
 </div>

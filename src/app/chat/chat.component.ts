@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewEncapsulation, Input, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { WindowSizeService } from '../services/window-size.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFireDatabase,AngularFireObject} from 'angularfire2/database';
+import { Observable } from 'rxjs';
 export interface Message {
   name: string;
   message: string;
@@ -16,19 +17,19 @@ export interface Message {
 export class ChatComponent implements OnInit, AfterViewInit {
   divWidth: Number;
   chatForm: FormGroup;
-  remote$: AngularFirestoreDocument<{}>;
+  remoteRef$:AngularFireObject<Message>
   messages: Message[] = [];
   @Input() userName: string;
-  constructor(private windowSize: WindowSizeService, private fb: FormBuilder, public db: AngularFirestore) {
+  constructor(private windowSize: WindowSizeService, private fb: FormBuilder, public db: AngularFireDatabase) {
     this.windowSize.RegisterListener(x => this.divWidth = x);
-    this.remote$ = this.db.doc('chat-450');
+    this.remoteRef$ = this.db.object('chat-450');
 
     this.createForm();
     //[disabled]="chatForm.status === 'INVALID'"
   }
 
   ngOnInit() {
-    this.remote$.valueChanges().subscribe(
+    this.remoteRef$.valueChanges().subscribe(
       (data: any) => {
         if (data.name === this.userName) {
           data.name = 'me';
@@ -55,7 +56,7 @@ export class ChatComponent implements OnInit, AfterViewInit {
       name: this.userName,
       message: this.chatForm.value['message']
     };
-    this.remote$.update(m);
+    this.remoteRef$.update(m);
     this.chatForm.reset();
   }
 }
