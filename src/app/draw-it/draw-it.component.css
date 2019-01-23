@@ -15,3 +15,6 @@ canvas {
     margin: 5px;
     cursor: pointer;
 }
+.circle-scale{
+    transform: scale(1.2);
+}

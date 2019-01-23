@@ -8,6 +8,8 @@ import { AuthService } from './../services/auth.service';
 })
 export class LogInComponent implements OnInit {
   hide :boolean = true;
+  errorFlag = false;
+  
   loginForm: FormGroup;
   constructor(private fb: FormBuilder, private auth:AuthService) {
     this.createForm();
@@ -22,6 +24,10 @@ export class LogInComponent implements OnInit {
     });
   }
   onSubmit():void{
-    this.auth.logIn(this.loginForm.value.email,this.loginForm.value.password);
+    this.auth.logIn(this.loginForm.value.email,this.loginForm.value.password)
+    .catch((err)=> {
+      this.errorFlag = true;
+      console.error(err);
+    });
   }
 }

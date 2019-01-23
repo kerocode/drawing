@@ -4,12 +4,18 @@ import {
 } from '@angular/core';
 import { Observable, fromEvent } from 'rxjs';
 import { map, filter, throttleTime, switchMap, takeUntil, pairwise, tap } from 'rxjs/operators';
-import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
 import { WindowSizeService } from '../services/window-size.service';
 import { AuthService } from './../services/auth.service';
 import { User } from '@firebase/auth-types';
 import { chatTransition } from '../animations/chat.animations';
 import { ChatModalComponent } from '../chat-modal/chat-modal.component';
+import { AngularFireObject, AngularFireDatabase } from '@angular/fire/database';
+export interface Color {
+  name:string;
+  id:number;
+  scale:Boolean;
+}
+
 @Component({
   selector: 'app-draw-it',
   templateUrl: './draw-it.component.html',
@@ -27,8 +33,16 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
   childObject: string;
   private drawing = {};
   canvasEl: HTMLCanvasElement;
-  public colors = ['#039be5', '#303f9f', '#c2185b', '#d32f2f', '#ffa000', '#f4511e', '#616161', '#9e9e9e', '#607d8b', '#ff1744',
-    '#212121', '#d50000', '#4fc3f7', '#304ffe', '#4db6ac', '#00695c', '#827717', '#4caf50'];
+  public colors:Color[] = 
+  [{name:'#039be5',id:1,scale:false}, {name:'#303f9f',id:2,scale:false},
+   {name:'#c2185b',id:3,scale:false},  {name:'#d32f2f',id:4,scale:false}, 
+   {name:'#ffa000',id:5,scale:false},  {name:'#f4511e',id:6,scale:false}, 
+   {name:'#616161',id:7,scale:false},  {name:'#9e9e9e',id:8,scale:false}, 
+   {name:'#607d8b',id:9,scale:false},  {name:'#ff1744',id:10,scale:false},
+   {name:'#212121',id:11,scale:false}, {name:'#d50000',id:12,scale:false}, 
+   {name:'#4fc3f7',id:13,scale:false}, {name:'#304ffe',id:14,scale:false},
+   {name:'#4db6ac',id:15,scale:false}, {name:'#00695c',id:16,scale:false}, 
+   {name:'#827717',id:17,scale:false}, {name:'#4caf50',id:18,scale:false} ];
   matadata: Observable<any>;
   private remoteRef$: AngularFireObject<any>
   private usersRef$: AngularFireObject<any>
@@ -44,6 +58,7 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
   private cx: CanvasRenderingContext2D;
   lineWidth = 3;
   showChat: boolean = false;
+  private previousId: number=0;
   constructor(private element: ElementRef, public db: AngularFireDatabase, private windowSize: WindowSizeService,
     private authService: AuthService) {
     this.remoteRef$ = this.db.object('drawing');
@@ -168,13 +183,20 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
       this.cx.stroke();
     }
   }
-  packColor(color: string) {
+  packColor(color: Color) {
     /*this.matadata.set({ lineWidth: this.cx.lineWidth, strokeStyle: color });
     this.matadata.valueChanges().subscribe(
       (data: any) => {
         this.cx.strokeStyle = data.strokeStyle;
       });*/
-    this.cx.strokeStyle = color;
+      this.colors[color.id-1].scale = true;
+      if(this.previousId){
+        if(this.colors[this.previousId-1].scale){
+          this.colors[this.previousId-1].scale= false;
+        }
+      }
+    this.previousId = color.id;    
+    this.cx.strokeStyle = color.name;
   }
   onInputChange(event: any) {
     this.cx.lineWidth = event.value;
@@ -196,6 +218,10 @@ export class DrawItComponent implements OnInit, AfterViewInit, OnDestroy {
   public toggleChat(): void {
     this.showChat = !this.showChat;
   }
+
+  public trackById(index :number,color:Color):number{
+    return color.id;
+   }
 }
 
 /*

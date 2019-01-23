@@ -1,15 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { AngularFireAuth } from 'angularfire2/auth';
 ///import * as firebase from 'firebase/app';
 import { firebase } from '@firebase/app';
 import { User } from '@firebase/auth-types';
-import { Message } from './../chat/chat.component';
-import { Subject,of,Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireDatabase } from 'angularfire2/database';
-
+import { Observable } from 'rxjs';
+import { AngularFireAuth } from "@angular/fire/auth";
+import { AngularFireDatabase } from '@angular/fire/database';
 @Injectable()
 export class AuthService implements OnDestroy {
 
@@ -55,33 +51,32 @@ export class AuthService implements OnDestroy {
     return this.user !== null;
   }
 
-  signUp(email:string,password:string):Promise<any>{
+  async signUp(email:string,password:string):Promise<any>{
     return this._firebaseAuth.auth.createUserWithEmailAndPassword(email,password)
-    .then(value=>{
+    .then((value: any)=>{
       console.log('Success!',value);
     //  this.userDetails = Observable.of(value);
       this.router.navigate(['/draw']);
+      return true;
     })
-    .catch(err=>{
+    .catch((err: { message: any; })=>{
       console.log('error',err.message);
+      return false;
     })
   }
-  logIn(email: string, password: string):Promise<any> {
+  async logIn(email: string, password: string):Promise<any> {
     return this._firebaseAuth
       .auth
       .signInWithEmailAndPassword(email, password)
-      .then(value => {
+      .then((value: any) => {
         console.log('Success!',value);
     //    this.userDetails = Observable.of(value);
         this.router.navigate(['/draw']);
-      })
-      .catch(err => {
-        console.log('Something went wrong:',err.message);
       });
   }
   logout() {
     this._firebaseAuth.auth.signOut()
-    .then((res) => {
+    .then(() => {
       this.db.object(`loggedInUsers/${this.userId}`).remove();
       this.router.navigate(['/']);
   });
