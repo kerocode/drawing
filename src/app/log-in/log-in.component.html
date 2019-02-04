@@ -5,11 +5,13 @@
         Invalid Password and/or Username
     </div>
     <form class="form-container" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
-          <mat-form-field>
+          <mat-form-field appearance="fill">
+              <mat-label>Email</mat-label>
               <input matInput placeholder="Your Email" type="email" formControlName="email" class="example-right-align">
               <span matPrefix><img style="vertical-align: bottom;" [src]="'./assets/icons/ic_email_black_24px.svg'">&nbsp;</span>
             </mat-form-field>
-            <mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Password</mat-label>
                 <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" formControlName="password">
                 <span matPrefix><img style="vertical-align: bottom;" [src]="'./assets/icons/ic_lock_black_24px.svg'">&nbsp;</span>
                 <img matSuffix (click)="hide = !hide" [src]="hide ? './assets/icons/ic_visibility_black_24px.svg' : './assets/icons/ic_visibility_off_black_24px.svg'">

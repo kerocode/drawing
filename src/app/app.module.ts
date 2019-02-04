@@ -55,7 +55,7 @@ import { appRoutingModule } from './app-routing.module';
     ReactiveFormsModule
   ],
   providers: [WindowSizeService,AuthService,AuthGuardService,
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true}}
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: true,float:'always'}}
   ],
   bootstrap: [AppComponent]
 })
